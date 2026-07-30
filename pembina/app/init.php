@@ -1,4 +1,5 @@
 <?php
+require_once '../../env.example.php';
 if (!session_id()) session_start();
 
 $configFiles = glob(__DIR__ . '/config/*.php');

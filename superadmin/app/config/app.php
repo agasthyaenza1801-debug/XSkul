@@ -1,11 +1,18 @@
 <?php
 
-define('APP_NAME', 'XSkul');
-define('APP_URL', $_ENV['APP_URL'] ?? 'http://localhost/xskul/superadmin/public');
+// identitas Aplikasi
+define('APP_NAME', getenv('APP_NAME'));
+define('APP_URL', getenv('APP_URL'));
 
-define('APP_ENV', $_ENV['APP_ENV'] ?? 'production');
+// environment aplikasi
+define('APP_ENV', getenv("APP_ENV") ?? 'production');
 define('APP_DEBUG', APP_ENV === 'development');
 
-define('APP_TIMEZONE', 'Asia/Jakarta');
+// zona waktu
+define('APP_TIMEZONE', getenv('APP_TIMEZONE'));
 
+// list role
+define('APP_ROLES', ['admin', 'pembina', 'siswa']);
+
+// zona waktu berdasarkan konfigurasi setiap developer
 date_default_timezone_set(APP_TIMEZONE);

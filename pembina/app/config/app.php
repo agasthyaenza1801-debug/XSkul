@@ -1,22 +1,18 @@
 <?php
 
-// Identitas Aplikasi
-define('APP_NAME', 'XSkul');
-define('APP_URL', 'http://localhost/XSkul/pembina/public');
+// identitas Aplikasi
+define('APP_NAME', getenv('APP_NAME'));
+define('APP_URL', getenv('APP_URL'));
 
-// Environment & Debugging
-define('APP_ENV', $_ENV['APP_ENV'] ?? 'production');
+// environment aplikasi
+define('APP_ENV', getenv("APP_ENV") ?? 'production');
 define('APP_DEBUG', APP_ENV === 'development');
 
-// Regional
-define('APP_TIMEZONE', 'Asia/Jakarta');
+// zona waktu
+define('APP_TIMEZONE', getenv('APP_TIMEZONE'));
 
-/*
- * Namespace → prefix URL
- * Karena 'roles' adalah array, kita bisa mendefinisikannya 
- * dalam bentuk array (didukung sejak PHP 7.0)
- */
+// list role
 define('APP_ROLES', ['admin', 'pembina', 'siswa']);
 
-// Set timezone secara otomatis berdasarkan konstanta di atas
+// zona waktu berdasarkan konfigurasi setiap developer
 date_default_timezone_set(APP_TIMEZONE);
