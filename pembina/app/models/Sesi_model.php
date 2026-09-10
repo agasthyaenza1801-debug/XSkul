@@ -2,7 +2,7 @@
 
 class Sesi_model extends Database {
     public function findByEkskul($ekskul_id) {
-        $this->query('SELECT * FROM sesi_latihan WHERE ekskul_id = :ekskul_id ORDER BY tanggal DESC');
+        $this->query('SELECT * FROM sesi_latihan WHERE ekskul_id = :ekskul_id ORDER BY tanggal ASC');
         $this->bind(':ekskul_id', $ekskul_id);
         return $this->resultSet();
     }

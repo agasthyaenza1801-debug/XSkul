@@ -1,6 +1,13 @@
 <?php
 
 class Pendaftaran_model extends Database {
+    public function findPresensiByEkskulAndDate($ekskul_id, $tanggal) {
+        $this->query('SELECT pr.*, s.nama AS nama_siswa, s.nis, s.kelas FROM presensi pr JOIN siswa s ON s.id = pr.siswa_id WHERE pr.ekskul_id = :ekskul_id AND pr.tanggal = :tanggal ORDER BY s.nama ASC');
+        $this->bind(':ekskul_id', $ekskul_id);
+        $this->bind(':tanggal', $tanggal);
+        return $this->resultSet();
+    }
+
     public function siswaAvailable($ekskul_id) {
         $this->query('SELECT s.id, s.nis, s.nama, s.kelas FROM siswa s WHERE s.is_active = 1 AND s.id NOT IN (SELECT siswa_id FROM pendaftaran WHERE ekskul_id = :ekskul_id AND status = "aktif") ORDER BY s.nama ASC');
         $this->bind(':ekskul_id', $ekskul_id);
