@@ -13,6 +13,18 @@ class Profile extends Controller {
     public function index() {
         $message = $_SESSION['profile_message'] ?? null;
         unset($_SESSION['profile_message']);
+        $pembinaModel = $this->model('Pembina_model');
+        $currentPembina = $pembinaModel->findById($_SESSION['pembina']['id']);
+        if ($currentPembina) {
+            $_SESSION['pembina']['nip'] = $currentPembina['nip'];
+            $_SESSION['pembina']['created_at'] = $currentPembina['created_at'];
+        }
+        $ekskul = $this->model('Ekskul_model')->findByPembina($_SESSION['pembina']['id']);
+        if ($ekskul) {
+            $_SESSION['pembina']['ekskul_id'] = $ekskul['id'];
+            $_SESSION['pembina']['ekskul'] = $ekskul['nama'];
+            $_SESSION['pembina']['ikon_emoji'] = $ekskul['ikon_emoji'];
+        }
         $this->template('main/header', [
             'title' => 'Profil Pembina',
             'activeMenu' => 'profile',

@@ -24,7 +24,9 @@ class Auth extends Controller {
                 'nama'  => $siswa['nama'],
                 'username' => $siswa['username'],
                 'nis'   => $siswa['nis'],
-                'kelas' => $siswa['kelas']
+                'nisn'  => $siswa['nisn'],
+                'kelas' => $siswa['kelas'],
+                'created_at' => $siswa['created_at']
             ];
             header('Location: ' . APP_URL . '/dashboard'); exit;
         }

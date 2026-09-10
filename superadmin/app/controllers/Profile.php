@@ -10,6 +10,13 @@ class Profile extends Controller {
     public function index() {
         $message = $_SESSION['profile_message'] ?? null;
         unset($_SESSION['profile_message']);
+        $model = $this->model('SuperAdmin_model');
+        $currentAdmin = $model->findById($_SESSION['admin']['id']);
+        if ($currentAdmin) {
+            $_SESSION['admin']['nama'] = $currentAdmin['nama'];
+            $_SESSION['admin']['username'] = $currentAdmin['username'];
+            $_SESSION['admin']['created_at'] = $currentAdmin['created_at'];
+        }
         $this->template('main/header', [
             'title' => 'Profil Superadmin',
             'activeMenu' => 'profile',

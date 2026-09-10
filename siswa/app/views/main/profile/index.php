@@ -1,25 +1,63 @@
 <?php
 $siswa = $_SESSION['siswa'];
-$username = $siswa['username'] ?? $siswa['nis'] ?? $siswa['nama'] ?? '';
 $initial = strtoupper(substr($siswa['nama'], 0, 1));
+$months = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+$createdTimestamp = !empty($siswa['created_at']) ? strtotime($siswa['created_at']) : false;
+$createdAt = $createdTimestamp ? date('d', $createdTimestamp) . ' ' . $months[(int)date('n', $createdTimestamp)] . ' ' . date('Y', $createdTimestamp) : '-';
+$activeEkskuls = $activeEkskuls ?? [];
 ?>
-<div class="max-w-3xl mx-auto">
+<div class="max-w-3xl">
     <?php if (!empty($message)): ?><div class="mb-5 rounded-xl px-4 py-3 text-sm font-semibold <?= $message['type'] === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700' ?>"><?= htmlspecialchars($message['text']) ?></div><?php endif; ?>
-    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div class="bg-primary px-8 py-10 text-white">
-            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-3xl font-extrabold border-4 border-white/30">
-                <?= htmlspecialchars($initial) ?>
+
+    <div class="mb-6 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="h-2 w-full bg-primary"></div>
+        <div class="p-6">
+            <h1 class="mb-6 border-b border-slate-200 pb-2 text-lg font-bold text-slate-800">Profil Siswa</h1>
+
+            <div class="mb-8 flex items-center gap-4">
+                <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-indigo-200 bg-indigo-100 text-2xl font-bold text-indigo-600">
+                    <?= htmlspecialchars($initial) ?>
+                </div>
+                <h2 class="text-2xl font-bold uppercase text-slate-900"><?= htmlspecialchars($siswa['nama']) ?></h2>
             </div>
-            <h1 class="mt-5 text-2xl font-extrabold"><?= htmlspecialchars($siswa['nama']) ?></h1>
-            <p class="mt-1 text-sm text-white/75">Profil Siswa</p>
+
+            <div class="mb-8 grid grid-cols-[100px_1fr] gap-y-3 text-sm">
+                <div class="font-medium tracking-wide text-slate-500">NISN</div>
+                <div class="font-semibold text-slate-800"><?= htmlspecialchars($siswa['nisn'] ?? '-') ?></div>
+
+                <div class="font-medium tracking-wide text-slate-500">KELAS</div>
+                <div class="font-semibold text-slate-800"><?= htmlspecialchars($siswa['kelas'] ?? '-') ?></div>
+
+                <div class="font-medium tracking-wide text-slate-500">TGL DIBUAT</div>
+                <div class="font-semibold text-slate-800"><?= htmlspecialchars($createdAt) ?></div>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                <button type="button" data-modal-target="password-modal" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium transition hover:bg-slate-50">Ubah Kata Sandi</button>
+                <button type="button" data-modal-target="nama-modal" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium transition hover:bg-slate-50">Ubah Nama</button>
+            </div>
         </div>
-        <div class="p-8 grid gap-5 sm:grid-cols-2">
-            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-400">Username</p><p class="mt-1 font-bold text-midnight"><?= htmlspecialchars($username) ?></p></div>
-            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-400">Kelas</p><p class="mt-1 font-bold text-midnight"><?= htmlspecialchars($siswa['kelas']) ?></p></div>
-        </div>
-        <div class="px-8 pb-8 flex flex-wrap gap-3">
-            <button type="button" data-modal-target="nama-modal" class="px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primaryDark">Ubah Nama</button>
-            <button type="button" data-modal-target="password-modal" class="px-4 py-2.5 rounded-xl border border-slate-200 text-midnight text-sm font-bold hover:bg-slate-50">Ubah Password</button>
+    </div>
+
+    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="mb-5 text-lg font-bold text-slate-800">Ekstrakurikuler Aktif</h2>
+
+        <?php if (!empty($activeEkskuls)): ?>
+            <div class="mb-6 flex flex-wrap gap-3">
+                <?php foreach ($activeEkskuls as $index => $ekskul): ?>
+                    <?php $chipColors = ['bg-orange-100 text-orange-800', 'bg-blue-100 text-blue-800', 'bg-pink-100 text-pink-800']; ?>
+                    <a href="<?= APP_URL ?>/ekskul/detail/<?= (int)$ekskul['ekskul_id'] ?>" class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition hover:brightness-95 <?= $chipColors[$index % count($chipColors)] ?>">
+                        <span><?= htmlspecialchars($ekskul['ikon_emoji'] ?? '*') ?></span>
+                        <?= htmlspecialchars($ekskul['nama_ekskul']) ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="mb-6 text-sm text-slate-500">Belum ada ekstrakurikuler aktif.</p>
+        <?php endif; ?>
+
+        <div class="flex justify-end border-t border-slate-100 pt-4">
+            <a href="<?= APP_URL ?>/ekskul" class="rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-600 transition hover:bg-indigo-50">Daftar Ekskul Baru</a>
         </div>
     </div>
 </div>

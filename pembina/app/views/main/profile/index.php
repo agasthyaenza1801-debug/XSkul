@@ -1,25 +1,48 @@
 <?php
 $pembina = $_SESSION['pembina'];
-$username = $pembina['username'] ?? $pembina['nip'] ?? $pembina['nama'] ?? '';
 $initial = strtoupper(substr($pembina['nama'], 0, 1));
+$months = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+$createdTimestamp = !empty($pembina['created_at']) ? strtotime($pembina['created_at']) : false;
+$createdAt = $createdTimestamp ? date('d', $createdTimestamp) . ' ' . $months[(int)date('n', $createdTimestamp)] . ' ' . date('Y', $createdTimestamp) : '-';
 ?>
-<div class="max-w-3xl mx-auto">
+<div class="max-w-3xl">
     <?php if (!empty($message)): ?><div class="mb-5 rounded-xl px-4 py-3 text-sm font-semibold <?= $message['type'] === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700' ?>"><?= htmlspecialchars($message['text']) ?></div><?php endif; ?>
-    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div class="bg-primary px-8 py-10 text-white">
-            <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-3xl font-extrabold border-4 border-white/30">
+
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div class="h-2 w-full bg-primary"></div>
+        <div class="p-6">
+            <h1 class="mb-6 border-b border-slate-200 pb-2 text-lg font-bold text-slate-800">Profil Pembina</h1>
+
+            <div class="mb-8 flex items-center gap-4">
+                <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-indigo-200 bg-indigo-100 text-2xl font-bold text-indigo-600">
                 <?= htmlspecialchars($initial) ?>
+                </div>
+                <h2 class="text-2xl font-bold uppercase text-slate-900"><?= htmlspecialchars($pembina['nama']) ?></h2>
             </div>
-            <h1 class="mt-5 text-2xl font-extrabold"><?= htmlspecialchars($pembina['nama']) ?></h1>
-            <p class="mt-1 text-sm text-white/75">Profil Pembina</p>
+
+            <div class="mb-8 grid grid-cols-[100px_1fr] gap-y-3 text-sm">
+                <div class="font-medium tracking-wide text-slate-500">NIP</div>
+                <div class="font-semibold text-slate-800"><?= htmlspecialchars($pembina['nip'] ?? '-') ?></div>
+
+                <div class="font-medium tracking-wide text-slate-500">TGL DIBUAT</div>
+                <div class="font-semibold text-slate-800"><?= htmlspecialchars($createdAt) ?></div>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                <button type="button" data-modal-target="password-modal" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium transition hover:bg-slate-50">Ubah Kata Sandi</button>
+                <button type="button" data-modal-target="nama-modal" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium transition hover:bg-slate-50">Ubah Nama</button>
+            </div>
         </div>
-        <div class="p-8 grid gap-5 sm:grid-cols-2">
-            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-400">Username</p><p class="mt-1 font-bold text-midnight"><?= htmlspecialchars($username) ?></p></div>
-            <div><p class="text-xs font-bold uppercase tracking-wider text-slate-400">Ekskul</p><p class="mt-1 font-bold text-midnight"><?= htmlspecialchars($pembina['ekskul']) ?></p></div>
-        </div>
-        <div class="px-8 pb-8 flex flex-wrap gap-3">
-            <button type="button" data-modal-target="nama-modal" class="px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primaryDark">Ubah Nama</button>
-            <button type="button" data-modal-target="password-modal" class="px-4 py-2.5 rounded-xl border border-slate-200 text-midnight text-sm font-bold hover:bg-slate-50">Ubah Password</button>
+    </div>
+
+    <div class="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="mb-5 text-lg font-bold text-slate-800">Ekstrakurikuler Binaan</h2>
+
+        <div class="mb-6 flex flex-wrap gap-3">
+            <div class="flex items-center gap-2 rounded-lg bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-800">
+                <span><?= htmlspecialchars($pembina['ikon_emoji'] ?? '*') ?></span>
+                <?= htmlspecialchars($pembina['ekskul'] ?? '-') ?>
+            </div>
         </div>
     </div>
 </div>

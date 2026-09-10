@@ -13,12 +13,22 @@ class Profile extends Controller {
     public function index() {
         $message = $_SESSION['profile_message'] ?? null;
         unset($_SESSION['profile_message']);
+        $siswaModel = $this->model('Siswa_model');
+        $currentSiswa = $siswaModel->findById($_SESSION['siswa']['id']);
+        if ($currentSiswa) {
+            $_SESSION['siswa']['nisn'] = $currentSiswa['nisn'];
+            $_SESSION['siswa']['created_at'] = $currentSiswa['created_at'];
+        }
+        $pendaftaranModel = $this->model('Pendaftaran_model');
+
         $this->template('main/header', [
             'title' => 'Profil Siswa',
             'activeMenu' => 'profile',
             'message' => $message
         ]);
-        $this->view('main/profile/index');
+        $this->view('main/profile/index', [
+            'activeEkskuls' => $pendaftaranModel->findActiveBySiswa($_SESSION['siswa']['id'])
+        ]);
         $this->template('main/footer');
     }
 

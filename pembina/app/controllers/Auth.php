@@ -36,8 +36,10 @@ class Auth extends Controller {
                 'nama'      => $pembina['nama'],
                 'username'  => $pembina['username'],
                 'nip'       => $pembina['nip'],
+                'created_at' => $pembina['created_at'],
                 'ekskul_id' => $ekskul['id'],
-                'ekskul'    => $ekskul['nama']
+                'ekskul'    => $ekskul['nama'],
+                'ikon_emoji' => $ekskul['ikon_emoji']
             ];
             header('Location: ' . APP_URL . '/dashboard'); exit;
         }
