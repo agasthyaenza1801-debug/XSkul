@@ -12,7 +12,7 @@ class Auth extends Controller {
     }
 
     public function login() {
-        $nis      = trim($_POST['nis'] ?? '');
+        $nis = trim($_POST['nis'] ?? '');
         $password = $_POST['password'] ?? '';
 
         $siswaModel = $this->model('Siswa_model');
@@ -22,6 +22,7 @@ class Auth extends Controller {
             $_SESSION['siswa'] = [
                 'id'    => $siswa['id'],
                 'nama'  => $siswa['nama'],
+                'username' => $siswa['username'],
                 'nis'   => $siswa['nis'],
                 'kelas' => $siswa['kelas']
             ];

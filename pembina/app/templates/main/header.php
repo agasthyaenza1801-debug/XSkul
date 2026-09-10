@@ -88,7 +88,7 @@
             <a href="<?= APP_URL ?>/profile" class="flex items-center gap-4 rounded-xl p-1 hover:bg-slate-50 transition-colors">
                 <div class="text-right hidden sm:block">
                     <p class="text-sm font-bold text-midnight"><?= $_SESSION['pembina']['nama'] ?></p>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">NIP: <?= $_SESSION['pembina']['nip'] ?></p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Username: <?= htmlspecialchars($_SESSION['pembina']['username'] ?? $_SESSION['pembina']['nip'] ?? '') ?></p>
                 </div>
                 <div class="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold border border-primary/20">
                     <?= strtoupper(substr($_SESSION['pembina']['nama'], 0, 1)) ?>

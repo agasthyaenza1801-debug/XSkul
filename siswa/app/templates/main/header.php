@@ -73,7 +73,7 @@
         <header class="bg-white px-8 py-5 flex items-center justify-between border-b border-slate-100">
             <div>
                 <h2 class="text-xl font-bold text-midnight">Halo, <?= explode(' ', $_SESSION['siswa']['nama'])[0] ?>! 👋</h2>
-                <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">NIS: <?= $_SESSION['siswa']['nis'] ?> • <?= $_SESSION['siswa']['kelas'] ?></p>
+                <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Username: <?= htmlspecialchars($_SESSION['siswa']['username'] ?? $_SESSION['siswa']['nis'] ?? '') ?> • <?= htmlspecialchars($_SESSION['siswa']['kelas']) ?></p>
             </div>
             <a href="<?= APP_URL ?>/profile" class="flex items-center gap-4 rounded-xl p-1 hover:bg-slate-50 transition-colors">
                 <div class="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold border border-primary/20">

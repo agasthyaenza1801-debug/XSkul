@@ -7,15 +7,30 @@ class Siswa_model extends Database {
     }
 
     public function findById($id) {
-        $this->query('SELECT * FROM siswa WHERE id = :id LIMIT 1');
+        $this->query('SELECT *, nama AS username FROM siswa WHERE id = :id LIMIT 1');
         $this->bind(':id', $id);
         return $this->single();
     }
 
+    public function findByUsername($username) {
+        $this->query('SELECT *, nama AS username FROM siswa WHERE nama = :username LIMIT 1');
+        $this->bind(':username', $username);
+        return $this->single();
+    }
+
     public function findByNis($nis) {
-        $this->query('SELECT * FROM siswa WHERE nis = :nis LIMIT 1');
+        $this->query('SELECT *, nama AS username FROM siswa WHERE nis = :nis LIMIT 1');
         $this->bind(':nis', $nis);
         return $this->single();
+    }
+
+    public function updateCredentials($id, $nama, $password = null) {
+        $query = 'UPDATE siswa SET nama = :nama' . ($password !== null ? ', password = :password' : '') . ' WHERE id = :id';
+        $this->query($query);
+        $this->bind(':nama', $nama);
+        if ($password !== null) $this->bind(':password', $password);
+        $this->bind(':id', $id);
+        $this->execute();
     }
 
     public function create($data) {
