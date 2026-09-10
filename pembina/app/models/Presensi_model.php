@@ -15,12 +15,21 @@ class Presensi_model extends Database {
     }
 
     public function save($data) {
-        $this->query('INSERT INTO presensi (sesi_id, siswa_id, status, keterangan, dicatat_oleh) VALUES (:sesi_id, :siswa_id, :status, :keterangan, :dicatat_oleh) ON DUPLICATE KEY UPDATE status = VALUES(status), keterangan = VALUES(keterangan)');
-        $this->bind(':sesi_id',     $data['sesi_id']);
-        $this->bind(':siswa_id',    $data['siswa_id']);
-        $this->bind(':status',      $data['status']);
-        $this->bind(':keterangan',  $data['keterangan']);
-        $this->bind(':dicatat_oleh',$data['dicatat_oleh']);
+        $this->query('INSERT INTO presensi (sesi_id, siswa_id, status, is_penilaian, keterangan, dicatat_oleh) VALUES (:sesi_id, :siswa_id, :status, :is_penilaian, :keterangan, :dicatat_oleh) ON DUPLICATE KEY UPDATE status = VALUES(status), is_penilaian = VALUES(is_penilaian), keterangan = VALUES(keterangan)');
+        $this->bind(':sesi_id',      $data['sesi_id'], PDO::PARAM_INT);
+        $this->bind(':siswa_id',     $data['siswa_id'], PDO::PARAM_INT);
+        $this->bind(':status',       $data['status']);
+        $this->bind(':is_penilaian', $data['is_penilaian'], PDO::PARAM_INT);
+        $this->bind(':keterangan',   $data['keterangan']);
+        $this->bind(':dicatat_oleh', $data['dicatat_oleh'], PDO::PARAM_INT);
+        $this->execute();
+        return $this->rowCount();
+    }
+
+    public function setPenilaianBySesi($sesi_id, $is_penilaian) {
+        $this->query('UPDATE presensi SET is_penilaian = :is_penilaian WHERE sesi_id = :sesi_id');
+        $this->bind(':is_penilaian', $is_penilaian, PDO::PARAM_INT);
+        $this->bind(':sesi_id',      $sesi_id, PDO::PARAM_INT);
         $this->execute();
         return $this->rowCount();
     }

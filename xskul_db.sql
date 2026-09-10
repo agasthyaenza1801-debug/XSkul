@@ -120,6 +120,7 @@ CREATE TABLE `presensi` (
   `sesi_id` int UNSIGNED NOT NULL,
   `siswa_id` int UNSIGNED NOT NULL,
   `status` enum('H','I','S','A') NOT NULL DEFAULT 'A',
+  `is_penilaian` tinyint(1) NOT NULL DEFAULT '0',
   `keterangan` varchar(255) DEFAULT NULL,
   `dicatat_oleh` int UNSIGNED NOT NULL COMMENT 'pembina_id',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -130,13 +131,13 @@ CREATE TABLE `presensi` (
 -- Dumping data for table `presensi`
 --
 
-INSERT INTO `presensi` (`id`, `sesi_id`, `siswa_id`, `status`, `keterangan`, `dicatat_oleh`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'S', '', 1, '2026-05-14 00:47:06', '2026-05-14 00:49:31'),
-(2, 1, 2, 'I', 'Ada acara keluarga pak', 1, '2026-05-14 00:47:06', '2026-05-14 00:47:06'),
-(3, 1, 3, 'A', '', 1, '2026-05-14 00:47:06', '2026-05-14 00:47:06'),
-(7, 2, 1, 'I', '', 1, '2026-05-18 00:48:31', '2026-05-18 00:48:31'),
-(8, 2, 2, 'H', '', 1, '2026-05-18 00:48:31', '2026-05-18 00:48:31'),
-(9, 2, 3, 'S', '', 1, '2026-05-18 00:48:31', '2026-05-18 00:48:31');
+INSERT INTO `presensi` (`id`, `sesi_id`, `siswa_id`, `status`, `is_penilaian`, `keterangan`, `dicatat_oleh`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'S', 0, '', 1, '2026-05-14 00:47:06', '2026-05-14 00:49:31'),
+(2, 1, 2, 'I', 0, 'Ada acara keluarga pak', 1, '2026-05-14 00:47:06', '2026-05-14 00:47:06'),
+(3, 1, 3, 'A', 0, '', 1, '2026-05-14 00:47:06', '2026-05-14 00:47:06'),
+(7, 2, 1, 'I', 0, '', 1, '2026-05-18 00:48:31', '2026-05-18 00:48:31'),
+(8, 2, 2, 'H', 0, '', 1, '2026-05-18 00:48:31', '2026-05-18 00:48:31'),
+(9, 2, 3, 'S', 0, '', 1, '2026-05-18 00:48:31', '2026-05-18 00:48:31');
 
 -- --------------------------------------------------------
 
@@ -152,6 +153,7 @@ CREATE TABLE `sesi_latihan` (
   `materi` varchar(255) DEFAULT NULL,
   `catatan` text,
   `dibuat_oleh` int UNSIGNED NOT NULL COMMENT 'pembina_id',
+  `is_penilaian` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -159,9 +161,30 @@ CREATE TABLE `sesi_latihan` (
 -- Dumping data for table `sesi_latihan`
 --
 
-INSERT INTO `sesi_latihan` (`id`, `ekskul_id`, `tanggal`, `pertemuan_ke`, `materi`, `catatan`, `dibuat_oleh`, `created_at`) VALUES
-(1, 1, '2026-05-14', 1, 'Buat Struktur HTML Dasar', 'Nggak ush overextend untuk tambahin semantic atau apapun yang tidak berkaitan dengan materi', 1, '2026-05-14 00:31:28'),
-(2, 1, '2026-05-18', 2, 'Belajar Membuat Projek Sederhana', '', 1, '2026-05-18 00:48:07');
+INSERT INTO `sesi_latihan` (`id`, `ekskul_id`, `tanggal`, `pertemuan_ke`, `materi`, `catatan`, `dibuat_oleh`, `is_penilaian`, `created_at`) VALUES
+(1, 1, '2026-05-14', 1, 'Buat Struktur HTML Dasar', 'Nggak ush overextend untuk tambahin semantic atau apapun yang tidak berkaitan dengan materi', 1, 0, '2026-05-14 00:31:28'),
+(2, 1, '2026-05-18', 2, 'Belajar Membuat Projek Sederhana', '', 1, 0, '2026-05-18 00:48:07');
+
+--
+-- Dumping data for table `penilaian`
+--
+
+INSERT INTO `penilaian` (`id`, `presensi_id`, `nilai`, `keterangan`, `created_at`, `updated_at`) VALUES
+(1, 1, 85.00, 'Perlu perbaikan pada struktur HTML', '2026-05-18 01:30:00', '2026-05-18 01:30:00'),
+(2, 8, 92.50, 'Projek sederhana sangat rapi', '2026-05-18 01:30:00', '2026-05-18 01:30:00');
+
+--
+-- Table structure for table `penilaian`
+--
+
+CREATE TABLE `penilaian` (
+  `id` int UNSIGNED NOT NULL,
+  `presensi_id` int UNSIGNED NOT NULL COMMENT 'FK ke presensi.id',
+  `nilai` decimal(5,2) DEFAULT NULL,
+  `keterangan` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -325,6 +348,13 @@ ALTER TABLE `presensi`
   ADD KEY `fk_presensi_pembina` (`dicatat_oleh`);
 
 --
+-- Indexes for table `penilaian`
+--
+ALTER TABLE `penilaian`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_penilaian_presensi` (`presensi_id`);
+
+--
 -- Indexes for table `sesi_latihan`
 --
 ALTER TABLE `sesi_latihan`
@@ -376,6 +406,12 @@ ALTER TABLE `presensi`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `penilaian`
+--
+ALTER TABLE `penilaian`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `sesi_latihan`
 --
 ALTER TABLE `sesi_latihan`
@@ -417,6 +453,12 @@ ALTER TABLE `presensi`
   ADD CONSTRAINT `fk_presensi_pembina` FOREIGN KEY (`dicatat_oleh`) REFERENCES `pembina` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_presensi_sesi` FOREIGN KEY (`sesi_id`) REFERENCES `sesi_latihan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_presensi_siswa` FOREIGN KEY (`siswa_id`) REFERENCES `siswa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `penilaian`
+--
+ALTER TABLE `penilaian`
+  ADD CONSTRAINT `fk_penilaian_presensi` FOREIGN KEY (`presensi_id`) REFERENCES `presensi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sesi_latihan`

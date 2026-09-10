@@ -54,6 +54,10 @@
                 <i class="bi bi-check2-square text-lg"></i>
                 Presensi Siswa
             </a>
+            <a href="<?= APP_URL ?>/penilaian" class="flex items-center gap-3 px-4 py-3 <?= $activeMenu === 'penilaian' ? 'bg-white/10 text-white font-bold' : 'text-slate-400 hover:bg-white/5 hover:text-white font-medium' ?> rounded-xl transition-colors">
+                <i class="bi bi-award text-lg"></i>
+                Penilaian
+            </a>
         </nav>
 
         <div class="p-4 border-t border-white/5">
