@@ -1,5 +1,6 @@
 <?php
 require_once '../../env.example.php';
+putenv('APP_URL=http://localhost/XSkul/superadmin/public');
 if (!session_id()) session_start();
 
 foreach (glob(__DIR__ . '/config/*.php') as $file) {

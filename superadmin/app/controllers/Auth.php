@@ -23,6 +23,7 @@ class Auth extends Controller {
                 'nama' => $admin['nama'],
             ];
             header("Location: " . APP_URL . '/dashboard');
+            exit;
         }
 
         $this->template('auth/header');
@@ -34,5 +35,6 @@ class Auth extends Controller {
         session_start();
         session_destroy();
         header("Location: " . APP_URL . '/auth');
+        exit;
     }
 }

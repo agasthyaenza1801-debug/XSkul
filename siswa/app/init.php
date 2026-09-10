@@ -1,5 +1,6 @@
 <?php
 require_once '../../env.example.php';
+putenv('APP_URL=http://localhost/XSkul/siswa/public');
 if (!session_id()) session_start();
 
 $configFiles = glob(__DIR__ . '/config/*.php');
