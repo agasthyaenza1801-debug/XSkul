@@ -7,15 +7,30 @@ class Pembina_model extends Database {
     }
 
     public function findById($id) {
-        $this->query('SELECT * FROM pembina WHERE id = :id LIMIT 1');
+        $this->query('SELECT *, nama AS username FROM pembina WHERE id = :id LIMIT 1');
         $this->bind(':id', $id);
         return $this->single();
     }
 
+    public function findByUsername($username) {
+        $this->query('SELECT *, nama AS username FROM pembina WHERE nama = :username LIMIT 1');
+        $this->bind(':username', $username);
+        return $this->single();
+    }
+
     public function findByNip($nip) {
-        $this->query('SELECT * FROM pembina WHERE nip = :nip LIMIT 1');
+        $this->query('SELECT *, nama AS username FROM pembina WHERE nip = :nip LIMIT 1');
         $this->bind(':nip', $nip);
         return $this->single();
+    }
+
+    public function updateCredentials($id, $nama, $password = null) {
+        $query = 'UPDATE pembina SET nama = :nama' . ($password !== null ? ', password = :password' : '') . ' WHERE id = :id';
+        $this->query($query);
+        $this->bind(':nama', $nama);
+        if ($password !== null) $this->bind(':password', $password);
+        $this->bind(':id', $id);
+        $this->execute();
     }
 
     public function create($data) {

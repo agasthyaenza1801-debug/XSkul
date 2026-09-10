@@ -50,6 +50,12 @@ class Pendaftaran_model extends Database {
         return $this->resultSet();
     }
 
+    public function findActiveBySiswa($siswa_id) {
+        $this->query('SELECT p.*, e.nama AS nama_ekskul, e.kategori, e.ikon_emoji FROM pendaftaran p JOIN ekskul e ON e.id = p.ekskul_id WHERE p.siswa_id = :siswa_id AND p.status = "aktif" ORDER BY e.nama ASC');
+        $this->bind(':siswa_id', $siswa_id);
+        return $this->resultSet();
+    }
+
     public function findById($id) {
         $this->query('SELECT * FROM pendaftaran WHERE id = :id LIMIT 1');
         $this->bind(':id', $id);

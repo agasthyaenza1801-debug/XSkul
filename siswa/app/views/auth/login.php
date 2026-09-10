@@ -27,7 +27,7 @@
                 <form action="<?= APP_URL ?>/auth/login" method="POST" class="space-y-5">
                     <div>
                         <label class="text-xs font-bold text-midnight/40 ml-1 uppercase tracking-widest">NIS Siswa</label>
-                        <input type="text" name="nis" required
+                    <input type="text" name="nis" required
                             class="w-full mt-1.5 px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-midnight focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 focus:outline-none transition-all duration-300 font-semibold"
                             placeholder="Masukkan NIS">
                     </div>

@@ -19,8 +19,10 @@ class Auth extends Controller {
         if ($admin && password_verify($password, $admin['password'])) {
             session_start();
             $_SESSION['admin'] = [
-                'id'   => $admin['id'],
-                'nama' => $admin['nama'],
+                'id'         => $admin['id'],
+                'nama'       => $admin['nama'],
+                'username'   => $admin['username'],
+                'created_at' => $admin['created_at']
             ];
             header("Location: " . APP_URL . '/dashboard');
             exit;

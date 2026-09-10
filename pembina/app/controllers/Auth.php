@@ -12,7 +12,7 @@ class Auth extends Controller {
     }
 
     public function login() {
-        $nip      = trim($_POST['nip'] ?? '');
+        $nip = trim($_POST['nip'] ?? '');
         $password = $_POST['password'] ?? '';
 
         $pembinaModel = $this->model('Pembina_model');
@@ -34,9 +34,12 @@ class Auth extends Controller {
             $_SESSION['pembina'] = [
                 'id'        => $pembina['id'],
                 'nama'      => $pembina['nama'],
+                'username'  => $pembina['username'],
                 'nip'       => $pembina['nip'],
+                'created_at' => $pembina['created_at'],
                 'ekskul_id' => $ekskul['id'],
-                'ekskul'    => $ekskul['nama']
+                'ekskul'    => $ekskul['nama'],
+                'ikon_emoji' => $ekskul['ikon_emoji']
             ];
             header('Location: ' . APP_URL . '/dashboard'); exit;
         }

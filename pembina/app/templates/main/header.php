@@ -61,6 +61,15 @@
         </nav>
 
         <div class="p-4 border-t border-white/5">
+            <a href="<?= APP_URL ?>/profile" class="w-full flex items-center gap-3 px-4 py-3 mb-1 rounded-xl hover:bg-white/5 transition-colors">
+                <div class="w-10 h-10 shrink-0 bg-primary text-white rounded-full flex items-center justify-center font-bold border border-white/10">
+                    <?= strtoupper(substr($_SESSION['pembina']['nama'], 0, 1)) ?>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-bold text-white truncate"><?= htmlspecialchars($_SESSION['pembina']['nama']) ?></p>
+                    <p class="text-xs text-slate-400 truncate">Pembina</p>
+                </div>
+            </a>
             <a href="<?= APP_URL ?>/auth/logout" class="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-red-400 rounded-xl font-medium transition-colors text-sm">
                 <i class="bi bi-box-arrow-left text-lg"></i>
                 Keluar
@@ -76,15 +85,15 @@
                 <h2 class="text-xl font-bold text-midnight"><?= $title ?? 'Dashboard' ?></h2>
                 <p class="text-xs text-slate-400 font-medium">Ekskul: <span class="text-primary font-bold"><?= $_SESSION['pembina']['ekskul'] ?></span></p>
             </div>
-            <div class="flex items-center gap-4">
+            <a href="<?= APP_URL ?>/profile" class="flex items-center gap-4 rounded-xl p-1 hover:bg-slate-50 transition-colors">
                 <div class="text-right hidden sm:block">
                     <p class="text-sm font-bold text-midnight"><?= $_SESSION['pembina']['nama'] ?></p>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">NIP: <?= $_SESSION['pembina']['nip'] ?></p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Username: <?= htmlspecialchars($_SESSION['pembina']['username'] ?? $_SESSION['pembina']['nip'] ?? '') ?></p>
                 </div>
                 <div class="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold border border-primary/20">
                     <?= strtoupper(substr($_SESSION['pembina']['nama'], 0, 1)) ?>
                 </div>
-            </div>
+            </a>
         </header>
 
         <div class="p-8">
