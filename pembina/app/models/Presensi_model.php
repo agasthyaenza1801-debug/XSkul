@@ -1,6 +1,18 @@
 <?php
 
 class Presensi_model extends Database {
+    // Ambil semua data presensi untuk rekap keseluruhan
+    public function findAllRekapByEkskul($ekskul_id) {
+        $this->query('SELECT pr.*, s.nama AS nama_siswa, s.nis, s.kelas, sl.tanggal, sl.pertemuan_ke, sl.materi 
+                      FROM presensi pr 
+                      JOIN siswa s ON s.id = pr.siswa_id 
+                      JOIN sesi_latihan sl ON sl.id = pr.sesi_id 
+                      WHERE sl.ekskul_id = :ekskul_id 
+                      ORDER BY sl.tanggal ASC, s.nama ASC');
+        $this->bind(':ekskul_id', $ekskul_id);
+        return $this->resultSet();
+    }
+
     public function findBySesi($sesi_id) {
         $this->query('SELECT pr.*, s.nama AS nama_siswa, s.nis, s.kelas FROM presensi pr JOIN siswa s ON s.id = pr.siswa_id WHERE pr.sesi_id = :sesi_id ORDER BY s.nama ASC');
         $this->bind(':sesi_id', $sesi_id);

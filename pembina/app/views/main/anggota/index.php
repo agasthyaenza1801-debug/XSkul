@@ -1,6 +1,22 @@
+<?php 
+// Fallback aman untuk mendapatkan ekskul_id jika belum dikirim dari controller
+$current_ekskul_id = isset($ekskul_id) ? $ekskul_id : ($members[0]['ekskul_id'] ?? ($pending[0]['ekskul_id'] ?? 1));
+?>
+
 <div class="flex items-center justify-between mb-8">
     <h3 class="text-2xl font-black text-midnight">Daftar Anggota Ekskul</h3>
-    <span class="px-4 py-2 bg-primary/10 text-primary rounded-xl text-xs font-bold"><?= count($members) ?> Anggota Aktif</span>
+    <div class="flex items-center gap-3">
+        <!-- Tombol Export Excel & PDF -->
+        <div class="flex items-center gap-2">
+            <a href="<?= APP_URL ?>/anggota/excel/<?= $current_ekskul_id ?>" target="_blank" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-colors shadow-sm">
+                <i class="bi bi-file-earmark-excel"></i> Excel
+            </a>
+            <a href="<?= APP_URL ?>/anggota/pdf/<?= $current_ekskul_id ?>" target="_blank" class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-xs font-bold flex items-center gap-2 transition-colors shadow-sm">
+                <i class="bi bi-file-earmark-pdf"></i> PDF
+            </a>
+        </div>
+        <span class="px-4 py-2 bg-primary/10 text-primary rounded-xl text-xs font-bold"><?= count($members) ?> Anggota Aktif</span>
+    </div>
 </div>
 
 <div class="space-y-8">

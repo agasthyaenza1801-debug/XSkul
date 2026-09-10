@@ -1,10 +1,21 @@
 <div class="flex items-center justify-between mb-8">
     <h3 class="text-2xl font-black text-midnight">Presensi Siswa</h3>
-    <button onclick="document.getElementById('modalSesi').classList.remove('hidden'); document.getElementById('modalSesi').classList.add('flex')" 
-        class="px-5 py-2.5 bg-midnight text-white font-bold rounded-xl hover:bg-slate-800 transition-all text-sm flex items-center gap-2">
-        <i class="bi bi-calendar-plus text-base"></i>
-        Buat Sesi Baru
-    </button>
+    <div class="flex items-center gap-3">
+        <!-- Tombol Langsung Export Rekap Keseluruhan (Excel & PDF) -->
+        <div class="flex items-center gap-2">
+            <a href="<?= APP_URL ?>/presensi/export_rekap_excel" target="_blank" class="px-4 py-2.5 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-all text-sm flex items-center gap-2 shadow-sm">
+                <i class="bi bi-file-earmark-excel"></i> Export Excel
+            </a>
+            <a href="<?= APP_URL ?>/presensi/export_rekap_pdf" target="_blank" class="px-4 py-2.5 bg-rose-500 text-white font-bold rounded-xl hover:bg-rose-600 transition-all text-sm flex items-center gap-2 shadow-sm">
+                <i class="bi bi-file-earmark-pdf"></i> Export PDF
+            </a>
+        </div>
+        <button onclick="document.getElementById('modalSesi').classList.remove('hidden'); document.getElementById('modalSesi').classList.add('flex')" 
+            class="px-5 py-2.5 bg-midnight text-white font-bold rounded-xl hover:bg-slate-800 transition-all text-sm flex items-center gap-2">
+            <i class="bi bi-calendar-plus text-base"></i>
+            Buat Sesi Baru
+        </button>
+    </div>
 </div>
 
 <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
@@ -29,7 +40,11 @@
                     </td>
                     <td class="p-4 text-midnight font-bold text-sm"><?= date('d M Y', strtotime($s['tanggal'])) ?></td>
                     <td class="p-4 text-slate-500 font-medium text-sm"><?= htmlspecialchars($s['materi']) ?></td>
-                    <td class="p-4 pr-8 text-right">
+                    <td class="p-4 pr-8 text-right flex items-center justify-end gap-2">
+                        <!-- Tombol Export Per Sesi (Modal pilihan PDF / Excel) -->
+                        <button onclick="openExportSesiModal(<?= $s['id'] ?>)" class="inline-flex items-center gap-1 px-3 py-2 bg-emerald-50 text-emerald-600 text-[10px] font-black rounded-lg hover:bg-emerald-100 transition-all uppercase tracking-widest" title="Export Presensi Sesi Ini">
+                            <i class="bi bi-download"></i> Export
+                        </button>
                         <a href="<?= APP_URL ?>/presensi/detail/<?= $s['id'] ?>" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-600 text-[10px] font-black rounded-lg hover:bg-primary hover:text-white transition-all uppercase tracking-widest">
                             Catat Absen
                             <i class="bi bi-arrow-right"></i>
@@ -77,3 +92,29 @@
         </form>
     </div>
 </div>
+
+<!-- Modal Export Per Sesi -->
+<div id="modalExportSesi" class="fixed inset-0 z-50 hidden items-center justify-center bg-midnight/50 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl shadow-xl w-full max-w-sm mx-4 p-8 text-center">
+        <h4 class="text-lg font-extrabold text-midnight mb-2">Export Presensi Sesi</h4>
+        <p class="text-xs text-slate-400 mb-6 font-medium">Pilih format file untuk pertemuan ini.</p>
+        <div class="flex flex-col gap-3">
+            <a id="btnExcelSesi" href="#" target="_blank" class="w-full py-3 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-600 transition-all text-sm flex items-center justify-center gap-2">
+                <i class="bi bi-file-earmark-excel"></i> Download Excel (.xls)
+            </a>
+            <a id="btnPdfSesi" href="#" target="_blank" class="w-full py-3 bg-rose-500 text-white font-bold rounded-xl hover:bg-rose-600 transition-all text-sm flex items-center justify-center gap-2">
+                <i class="bi bi-file-earmark-pdf"></i> Download PDF / Print
+            </a>
+            <button type="button" onclick="document.getElementById('modalExportSesi').classList.add('hidden');" class="w-full py-2.5 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition-all text-sm mt-2">Batal</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openExportSesiModal(sesiId) {
+    document.getElementById('btnExcelSesi').href = '<?= APP_URL ?>/presensi/export_sesi_excel/' + sesiId;
+    document.getElementById('btnPdfSesi').href = '<?= APP_URL ?>/presensi/export_sesi_pdf/' + sesiId;
+    document.getElementById('modalExportSesi').classList.remove('hidden');
+    document.getElementById('modalExportSesi').classList.add('flex');
+}
+</script>
