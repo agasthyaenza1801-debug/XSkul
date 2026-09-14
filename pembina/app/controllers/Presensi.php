@@ -184,17 +184,8 @@ class Presensi extends Controller {
 
         // Cegah duplikat: satu ekskul hanya boleh satu sesi per tanggal (uq_sesi)
         if ($sesiModel->findByEkskulAndTanggal($ekskul_id, $_POST['tanggal'])) {
-            $data = [
-                'title'      => 'Presensi Siswa',
-                'activeMenu' => 'presensi',
-                'sesis'      => $sesiModel->findByEkskul($ekskul_id),
-                'error'      => 'Sesi untuk tanggal ' . date('d M Y', strtotime($_POST['tanggal'])) . ' sudah ada. Gunakan tanggal lain atau edit sesi yang sudah ada.',
-            ];
-
-            $this->template('main/header', $data);
-            $this->view('main/presensi/index', $data);
-            $this->template('main/footer');
-            return;
+            header('Location: ' . APP_URL . '/presensi?pesan=tanggal_sudah_ada&tgl=' . urlencode($_POST['tanggal']));
+            exit;
         }
 
         $sesiModel->create([
@@ -213,7 +204,7 @@ class Presensi extends Controller {
             $presensiModel->setPenilaianBySesi($sesiModel->lastInsertId(), 1);
         }
 
-        header('Location: ' . APP_URL . '/presensi'); exit;
+        header('Location: ' . APP_URL . '/presensi?pesan=sukses'); exit;
     }
 
     public function editSesi($sesi_id) {
@@ -227,6 +218,13 @@ class Presensi extends Controller {
         // Keamanan: Pastikan sesi ini milik ekskul pembina tersebut
         if (!$sesi || $sesi['ekskul_id'] != $_SESSION['pembina']['ekskul_id']) {
             header('Location: ' . APP_URL . '/presensi'); exit;
+        }
+
+        // Cegah duplikat tanggal (uq_sesi), kecuali sesi ini sendiri
+        $bentrok = $sesiModel->findByEkskulAndTanggal($_SESSION['pembina']['ekskul_id'], $_POST['tanggal']);
+        if ($bentrok && $bentrok['id'] != $sesi_id) {
+            header('Location: ' . APP_URL . '/presensi?pesan=tanggal_sudah_ada&tgl=' . urlencode($_POST['tanggal']));
+            exit;
         }
 
         $is_penilaian = isset($_POST['is_penilaian']) ? 1 : 0;

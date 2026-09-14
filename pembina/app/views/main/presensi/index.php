@@ -1,3 +1,20 @@
+<?php if (isset($error)): ?>
+<div class="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-xs font-bold flex items-center gap-3">
+    <i class="bi bi-exclamation-circle-fill text-base"></i>
+    <?= $error ?>
+</div>
+<?php elseif (($_GET['pesan'] ?? '') === 'tanggal_sudah_ada'): ?>
+<div class="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-xs font-bold flex items-center gap-3">
+    <i class="bi bi-exclamation-circle-fill text-base"></i>
+    Sesi untuk tanggal <?= date('d M Y', strtotime($_GET['tgl'] ?? '')) ?> sudah ada. Gunakan tanggal lain atau edit sesi yang sudah ada.
+</div>
+<?php elseif (($_GET['pesan'] ?? '') === 'sukses'): ?>
+<div class="mb-6 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-emerald-600 text-xs font-bold flex items-center gap-3">
+    <i class="bi bi-check-circle-fill text-base"></i>
+    Sesi latihan baru berhasil dibuat.
+</div>
+<?php endif; ?>
+
 <div class="flex items-center justify-between mb-8">
     <h3 class="text-2xl font-black text-midnight">Presensi Siswa</h3>
     <div class="flex items-center gap-3">
