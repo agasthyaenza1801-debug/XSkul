@@ -244,6 +244,24 @@ class Presensi extends Controller {
         header('Location: ' . APP_URL . '/presensi'); exit;
     }
 
+    public function hapusSesi($sesi_id) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: ' . APP_URL . '/presensi'); exit;
+        }
+
+        $sesiModel = $this->model('Sesi_model');
+        $sesi = $sesiModel->findById($sesi_id);
+
+        // Keamanan: Pastikan sesi ini milik ekskul pembina tersebut
+        if (!$sesi || $sesi['ekskul_id'] != $_SESSION['pembina']['ekskul_id']) {
+            header('Location: ' . APP_URL . '/presensi'); exit;
+        }
+
+        $sesiModel->hapus($sesi_id);
+
+        header('Location: ' . APP_URL . '/presensi?pesan=sesi_dihapus'); exit;
+    }
+
     public function detail($sesi_id) {
         $sesiModel     = $this->model('Sesi_model');
         $presensiModel = $this->model('Presensi_model');

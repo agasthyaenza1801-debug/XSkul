@@ -33,6 +33,13 @@ class Sesi_model extends Database {
         return $this->rowCount();
     }
 
+    public function hapus($id) {
+        $this->query('DELETE FROM sesi_latihan WHERE id = :id');
+        $this->bind(':id', $id, PDO::PARAM_INT);
+        $this->execute();
+        return $this->rowCount();
+    }
+
     public function update($id, $data) {
         $this->query('UPDATE sesi_latihan SET tanggal = :tanggal, pertemuan_ke = :pertemuan_ke, materi = :materi, catatan = :catatan, is_penilaian = :is_penilaian WHERE id = :id');
         $this->bind(':id',            $id, PDO::PARAM_INT);
